@@ -1,27 +1,21 @@
-package com.example.final_project.entity;
+package com.example.final_project.dto;
 
-import jakarta.persistence.*;
+import com.example.final_project.entity.Car;
+import com.example.final_project.entity.Customer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDate;
 
-@Entity
+import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Reservation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+public class ReservationGetDTO {
+    private int id;
     private Customer customer;
-    @ManyToOne
-    @JoinColumn(name = "car_id")
     private Car car;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate reservationStartDate;
@@ -30,6 +24,4 @@ public class Reservation {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
     private boolean isApproved;
-
-
 }

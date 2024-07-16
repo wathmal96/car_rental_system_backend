@@ -1,4 +1,4 @@
-package com.example.final_project.authenticatiom;
+package com.example.final_project.authentication;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

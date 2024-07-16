@@ -6,15 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class CustomerDTO {
+public class ImageDTO {
     private int id;
-    private String name;
-    private String password;
-    private String address;
-    private String contact;
-    private String eMail;
-    private String roles;
+    private String filePath;
 }
