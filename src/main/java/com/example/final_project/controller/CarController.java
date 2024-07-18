@@ -22,6 +22,13 @@ public class CarController {
         this.carService = carService;
     }
 
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping
+    public ResponseEntity<String> healthCheck(){
+        return new ResponseEntity<>("server up and running..!!",HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/get_all")
     public ResponseEntity<List<CarWithImagesDTO>> getAllCar() {
         List<CarWithImagesDTO> allCar = carService.getAllCar();

@@ -1,9 +1,9 @@
 package com.example.final_project.service;
 
-import com.example.final_project.dto.ReservationGetDTO;
-import com.example.final_project.dto.ReservationSetDTO;
+import com.example.final_project.dto.*;
 import com.example.final_project.entity.Car;
 import com.example.final_project.entity.Customer;
+import com.example.final_project.entity.Image;
 import com.example.final_project.entity.Reservation;
 import com.example.final_project.repo.CarRepo;
 import com.example.final_project.repo.CustomerRepo;
@@ -34,7 +34,22 @@ public class ReservationService {
             Customer customer = byId.get();
             Car car = byId1.get();
             Reservation save = reservationRepo.save(new Reservation(null, customer, car, reservationSetDTO.getReservationStartDate(), reservationSetDTO.getReservationEndDate(), reservationSetDTO.getOrderDate(), false));
-            return new ReservationGetDTO(save.getId(), save.getCustomer(), save.getCar(), save.getReservationStartDate(), reservationSetDTO.getReservationEndDate(), save.getOrderDate(), save.isApproved());
+
+            Customer customer1 = save.getCustomer();
+            CustomerDTO customerDTO = new CustomerDTO(customer1.getId(),customer1.getName(),customer1.getPassword(),customer1.getAddress(),customer1.getContact(),customer1.getEMail(),customer1.getRoles());
+
+            Car car1 = save.getCar();
+            List<Image> images = car1.getImages();
+
+            List<ImageDTO> imageDTOs = new ArrayList<>();
+            for (Image image : images) {
+                ImageDTO imageDTO = new ImageDTO(image.getId(), image.getFilePath());
+                imageDTOs.add(imageDTO);
+            }
+
+            CarWithImagesDTO carWithImagesDTO = new CarWithImagesDTO(car1.getId(), car1.getModel(), car1.getBrand(), car1.getEngineCapacity(), car1.getPrice(), imageDTOs);
+
+            return new ReservationGetDTO(save.getId(), customerDTO,carWithImagesDTO, save.getReservationStartDate(), reservationSetDTO.getReservationEndDate(), save.getOrderDate(), save.isApproved());
         }
         return null;
     }
@@ -45,20 +60,49 @@ public class ReservationService {
             Reservation reservation = byId.get();
             reservation.setApproved(true);
             Reservation save = reservationRepo.save(reservation);
-            return new ReservationGetDTO(save.getId(), save.getCustomer(), save.getCar(), save.getReservationStartDate(), save.getReservationEndDate(), save.getOrderDate(), save.isApproved());
+            Customer customer1 = save.getCustomer();
+            CustomerDTO customerDTO = new CustomerDTO(customer1.getId(),customer1.getName(),customer1.getPassword(),customer1.getAddress(),customer1.getContact(),customer1.getEMail(),customer1.getRoles());
+
+
+            Car car1 = save.getCar();
+            List<Image> images = car1.getImages();
+
+            List<ImageDTO> imageDTOs = new ArrayList<>();
+            for (Image image : images) {
+                ImageDTO imageDTO = new ImageDTO(image.getId(), image.getFilePath());
+                imageDTOs.add(imageDTO);
+            }
+
+            CarWithImagesDTO carWithImagesDTO = new CarWithImagesDTO(car1.getId(), car1.getModel(), car1.getBrand(), car1.getEngineCapacity(), car1.getPrice(), imageDTOs);
+
+
+            return new ReservationGetDTO(save.getId(), customerDTO, carWithImagesDTO, save.getReservationStartDate(), save.getReservationEndDate(), save.getOrderDate(), save.isApproved());
         }
         return null;
     }
 
     public List<ReservationGetDTO> viewReservationsOfCustomer(int id) {
-        List<Optional<Reservation>> byCustomerId = reservationRepo.findByCustomerId(id);
+        List<Reservation> byCustomerId = reservationRepo.findByCustomerId(id);
         List<ReservationGetDTO> reservationGetDTOS = new ArrayList<>();
-        for (Optional<Reservation> reservation : byCustomerId) {
-            Reservation reservation1;
-            if (reservation.isPresent()) {
-                reservation1 = reservation.get();
-                reservationGetDTOS.add(new ReservationGetDTO(reservation1.getId(), reservation1.getCustomer(), reservation1.getCar(), reservation1.getReservationStartDate(), reservation1.getReservationEndDate(), reservation1.getOrderDate(), reservation1.isApproved()));
+        for (Reservation reservation1 : byCustomerId) {
+                Customer customer1 = reservation1.getCustomer();
+                CustomerDTO customerDTO = new CustomerDTO(customer1.getId(),customer1.getName(),customer1.getPassword(),customer1.getAddress(),customer1.getContact(),customer1.getEMail(),customer1.getRoles());
+
+
+            Car car1 = reservation1.getCar();
+            List<Image> images = car1.getImages();
+
+            List<ImageDTO> imageDTOs = new ArrayList<>();
+            for (Image image : images) {
+                ImageDTO imageDTO = new ImageDTO(image.getId(), image.getFilePath());
+                imageDTOs.add(imageDTO);
             }
+
+            CarWithImagesDTO carWithImagesDTO = new CarWithImagesDTO(car1.getId(), car1.getModel(), car1.getBrand(), car1.getEngineCapacity(), car1.getPrice(), imageDTOs);
+
+
+            reservationGetDTOS.add(new ReservationGetDTO(reservation1.getId(), customerDTO, carWithImagesDTO, reservation1.getReservationStartDate(), reservation1.getReservationEndDate(), reservation1.getOrderDate(), reservation1.isApproved()));
+
         }
         return reservationGetDTOS;
     }
@@ -67,21 +111,38 @@ public class ReservationService {
         List<Reservation> all = reservationRepo.findAll();
         List<ReservationGetDTO> reservationGetDTOS = new ArrayList<>();
         for (Reservation reservation : all) {
-            reservationGetDTOS.add(new ReservationGetDTO(reservation.getId(), reservation.getCustomer(), reservation.getCar(), reservation.getReservationStartDate(), reservation.getReservationEndDate(), reservation.getOrderDate(), reservation.isApproved()));
+
+            Customer customer1 = reservation.getCustomer();
+            CustomerDTO customerDTO = new CustomerDTO(customer1.getId(),customer1.getName(),customer1.getPassword(),customer1.getAddress(),customer1.getContact(),customer1.getEMail(),customer1.getRoles());
+
+
+            Car car1 = reservation.getCar();
+            List<Image> images = car1.getImages();
+
+            List<ImageDTO> imageDTOs = new ArrayList<>();
+            for (Image image : images) {
+                ImageDTO imageDTO = new ImageDTO(image.getId(), image.getFilePath());
+                imageDTOs.add(imageDTO);
+            }
+
+            CarWithImagesDTO carWithImagesDTO = new CarWithImagesDTO(car1.getId(), car1.getModel(), car1.getBrand(), car1.getEngineCapacity(), car1.getPrice(), imageDTOs);
+
+
+            reservationGetDTOS.add(new ReservationGetDTO(reservation.getId(), customerDTO, carWithImagesDTO, reservation.getReservationStartDate(), reservation.getReservationEndDate(), reservation.getOrderDate(), reservation.isApproved()));
         }
         return reservationGetDTOS;
     }
 
-    public List<ReservationGetDTO> viewReservationsByDate(LocalDate date) {
-        List<Reservation> byReservationDate = reservationRepo.findByReservationStartDateLessThanEqualAndReservationEndDateGreaterThanEqual(date);
-        if (byReservationDate != null) {
-            List<ReservationGetDTO> reservationGetDTOS = new ArrayList<>();
-            for (Reservation reservation : byReservationDate) {
-                reservationGetDTOS.add(new ReservationGetDTO(reservation.getId(), reservation.getCustomer(), reservation.getCar(), reservation.getReservationStartDate(), reservation.getReservationEndDate(), reservation.getOrderDate(), reservation.isApproved()));
-            }
-            return reservationGetDTOS;
-        }
-        return null;
-    }
+//    public List<ReservationGetDTO> viewReservationsByDate(LocalDate date) {
+//        List<Reservation> byReservationDate = reservationRepo.findByReservationStartDateLessThanEqualAndReservationEndDateGreaterThanEqual(date);
+//        if (byReservationDate != null) {
+//            List<ReservationGetDTO> reservationGetDTOS = new ArrayList<>();
+//            for (Reservation reservation : byReservationDate) {
+//                reservationGetDTOS.add(new ReservationGetDTO(reservation.getId(), reservation.getCustomer(), reservation.getCar(), reservation.getReservationStartDate(), reservation.getReservationEndDate(), reservation.getOrderDate(), reservation.isApproved()));
+//            }
+//            return reservationGetDTOS;
+//        }
+//        return null;
+//    }
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepo extends JpaRepository<Reservation,Integer> {
-    List<Optional<Reservation>> findByCustomerId(int id);
-    List<Reservation> findByReservationStartDateLessThanEqualAndReservationEndDateGreaterThanEqual(LocalDate date);
+    List<Reservation> findByCustomerId(int id);
+//    List<Reservation> findByReservationStartDateLessThanEqualAndReservationEndDateGreaterThanEqual(LocalDate date);
 
 }

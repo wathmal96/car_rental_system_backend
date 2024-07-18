@@ -21,6 +21,7 @@ public class AdminUserDetails implements UserDetails {
         authorities = Arrays.stream(admin.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+
     }
 
     @Override

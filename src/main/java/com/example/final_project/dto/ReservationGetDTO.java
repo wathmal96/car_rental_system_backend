@@ -15,8 +15,8 @@ import java.time.LocalDate;
 @ToString
 public class ReservationGetDTO {
     private int id;
-    private Customer customer;
-    private Car car;
+    private CustomerDTO customer;
+    private CarWithImagesDTO car;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate reservationStartDate;
     @JsonFormat(pattern = "yyyy-MM-dd")

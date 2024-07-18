@@ -1,6 +1,6 @@
 package com.example.final_project.service;
 
-import com.example.final_project.dto.AdminDTO;
+import com.example.final_project.dto.AdminnNewDTO;
 import com.example.final_project.entity.Admin;
 import com.example.final_project.repo.AdminRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,15 @@ public class AdminService {
     private AdminRepo adminRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    public String addAdmin(AdminDTO adminDTO){
-        adminDTO.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
-        adminDTO.setName("admin_"+adminDTO.getName());
-        adminRepo.save(new Admin(null,adminDTO.getName(),adminDTO.getPassword(),adminDTO.getEMail(),adminDTO.getRoles()));
+    public AdminnNewDTO addAdmin(AdminnNewDTO adminnNewDTO){
+        adminnNewDTO.setPassword(passwordEncoder.encode(adminnNewDTO.getPassword()));
+        adminnNewDTO.setName("admin_"+ adminnNewDTO.getName());
 
-        return "user added";
+//        adminRepo.findByEMail( adminnNewDTO.getEMail()).isPresent();
+//        if (adminRepo.findByEMail( adminnNewDTO.getEMail()).isPresent()){
+//            return null;
+//        }
+        Admin save = adminRepo.save(new Admin(null, adminnNewDTO.getName(), adminnNewDTO.getPassword(), adminnNewDTO.getEMail(), adminnNewDTO.getRoles()));
+        return new AdminnNewDTO(save.getId(),save.getName(),save.getPassword(),save.getEMail(),save.getRoles());
     }
 }
