@@ -9,10 +9,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class AdminnNewDTO {
+public class CustomerNewDTO {
     private int id;
     private String name;
     private String password;
+    private String address;
+    private String contact;
     private String eMail;
-    private String roles;
+    private String roles = "customer";
 }

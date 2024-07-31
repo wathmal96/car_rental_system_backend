@@ -18,7 +18,7 @@ public class Admin {
     private Integer id;
     private String name;
     private String password;
-    private String eMail;
+    private String email;
     private String roles;
 
 }

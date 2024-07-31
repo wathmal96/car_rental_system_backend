@@ -1,10 +1,10 @@
 package com.example.final_project.service;
 
-import com.example.final_project.dto.CustomerDTO;
-import com.example.final_project.entity.Admin;
+import com.example.final_project.dto.CustomerLoginDTO;
+import com.example.final_project.dto.CustomerNewDTO;
 import com.example.final_project.entity.Customer;
-import com.example.final_project.repo.AdminRepo;
 import com.example.final_project.repo.CustomerRepo;
+import com.example.final_project.util.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,23 +13,41 @@ import java.util.Optional;
 
 @Service
 public class CustomerService {
-    @Autowired
     private CustomerRepo customerRepo;
-    @Autowired
     private PasswordEncoder passwordEncoder;
-    public String addCustomer(CustomerDTO customerDTO){
-        customerDTO.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
-        customerDTO.setName("customer_"+customerDTO.getName());
-        customerRepo.save(new Customer(null,customerDTO.getName(),customerDTO.getPassword(),customerDTO.getAddress(),customerDTO.getContact(),customerDTO.getEMail(),customerDTO.getRoles(),null));
+    private Converter converter;
 
-        return "user added";
+    public CustomerService(CustomerRepo customerRepo, PasswordEncoder passwordEncoder, Converter converter) {
+        this.customerRepo = customerRepo;
+        this.passwordEncoder = passwordEncoder;
+        this.converter = converter;
     }
-    public CustomerDTO getById(int id){
-        Optional<Customer> byId = customerRepo.findById(id);
-        if (byId.isPresent()){
-            Customer customer = byId.get();
-            return new CustomerDTO(customer.getId(),customer.getName(),customer.getPassword(),customer.getAddress(),customer.getContact(),customer.getEMail(),customer.getContact());
+
+    public CustomerNewDTO addCustomer(CustomerNewDTO customerNewDTO) {
+        customerNewDTO.setPassword(passwordEncoder.encode(customerNewDTO.getPassword()));
+        customerNewDTO.setName("customer_" + customerNewDTO.getName());
+        if (!customerRepo.existsCustomerByName(customerNewDTO.getName())) {
+            Customer save = customerRepo.save(converter.customerNewDTOToEntity(customerNewDTO));
+            return converter.entityToCustomerNewDTO(save);
         }
         return null;
     }
+
+    public CustomerLoginDTO loginCustomer(String name) {
+        Optional<Customer> byName = customerRepo.findByName("customer_" + name);
+        if (byName.isPresent()) {
+            Customer customer = byName.get();
+            return converter.entityToCustomerLoginDTO(customer);
+        }
+        return null;
+    }
+
+//    public CustomerNewDTO getById(int id) {
+//        Optional<Customer> byId = customerRepo.findById(id);
+//        if (byId.isPresent()) {
+//            Customer customer = byId.get();
+//            return new CustomerNewDTO(customer.getId(), customer.getName(), customer.getPassword(), customer.getAddress(), customer.getContact(), customer.getEMail(), customer.getContact());
+//        }
+//        return null;
+//    }
 }

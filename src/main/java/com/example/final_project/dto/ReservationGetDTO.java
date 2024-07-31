@@ -1,7 +1,5 @@
 package com.example.final_project.dto;
 
-import com.example.final_project.entity.Car;
-import com.example.final_project.entity.Customer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +13,7 @@ import java.time.LocalDate;
 @ToString
 public class ReservationGetDTO {
     private int id;
-    private CustomerDTO customer;
+    private CustomerNewDTO customer;
     private CarWithImagesDTO car;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate reservationStartDate;
@@ -24,4 +22,6 @@ public class ReservationGetDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
     private boolean isApproved;
+    private String status;
+    private double payment;
 }
