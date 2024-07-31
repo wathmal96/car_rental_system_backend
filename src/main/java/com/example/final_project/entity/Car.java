@@ -1,13 +1,13 @@
 package com.example.final_project.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -22,5 +22,18 @@ public class Car {
     private String brand;
     private String engineCapacity;
     private double price;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    private List<Reservation> reservations;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    private List<Image> images;
 
+//    public Car(Integer id, String model, String brand, String engineCapacity, double price) {
+//        this.id = id;
+//        this.model = model;
+//        this.brand = brand;
+//        this.engineCapacity = engineCapacity;
+//        this.price = price;
+//    }
 }
