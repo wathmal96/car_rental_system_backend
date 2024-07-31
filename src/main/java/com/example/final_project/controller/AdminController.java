@@ -2,7 +2,7 @@ package com.example.final_project.controller;
 
 import com.example.final_project.authentication.JwtService;
 import com.example.final_project.dto.AdminLoginDTO;
-import com.example.final_project.dto.AdminnNewDTO;
+import com.example.final_project.dto.AdminNewDTO;
 import com.example.final_project.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AdminController {
     @Autowired
     private AdminService adminService;
@@ -22,13 +23,14 @@ public class AdminController {
     private JwtService jwtService;
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @PostMapping("/new")
-    public ResponseEntity<AdminnNewDTO> addNew(@RequestBody AdminnNewDTO adminnNewDTO) {
-        AdminnNewDTO adminnNewDTO1 = adminService.addAdmin(adminnNewDTO);
-//        if (adminnNewDTO1==null){
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-        return new ResponseEntity<>(adminnNewDTO1, HttpStatus.CREATED);
+    public ResponseEntity<Object> addNew(@RequestBody AdminNewDTO adminNewDTO) {
+        AdminNewDTO adminNewDTO1 = adminService.addAdmin(adminNewDTO);
+        if (adminNewDTO1 == null) {
+            return new ResponseEntity<>("only one admin can add",HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(adminNewDTO1, HttpStatus.CREATED);
     }
 
     @CrossOrigin(origins = "http://localhost:5173")

@@ -42,11 +42,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/car/get_all").permitAll()
+                        .requestMatchers("/car/available").permitAll()
                         .requestMatchers("/admin/new").permitAll()
                         .requestMatchers("/admin/authenticate").permitAll()
                         .requestMatchers("/customer/new").permitAll()
                         .requestMatchers("/customer/authenticate").permitAll()
                         .requestMatchers("/assets/**").permitAll()
+//                        .requestMatchers("/reservation/get_by_customer/{id}/status/{status}").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

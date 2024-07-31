@@ -9,10 +9,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class AdminLoginDTO {
+public class CustomerLoginDTO {
     private int id;
     private String name;
     private String password;
-    private String roles = "admin";
+    private String address;
+    private String contact;
+    private String eMail;
+    private String roles = "customer";
     private String token;
 }
